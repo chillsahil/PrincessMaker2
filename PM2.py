@@ -100,6 +100,7 @@ jobs_data = [
 
 ]
 
+
 Housework=Job(jobs_data[0][0], jobs_data[0][1], jobs_data[0][2], jobs_data[0][3], jobs_data[0][4], jobs_data[0][5], jobs_data[0][6], jobs_data[0][7], jobs_data[0][8], jobs_data[0][9], jobs_data[0][10], jobs_data[0][11], jobs_data[0][12])
 Babysitting=Job(jobs_data[1][0], jobs_data[1][1], jobs_data[1][2], jobs_data[1][3], jobs_data[1][4], jobs_data[1][5], jobs_data[1][6], jobs_data[1][7], jobs_data[1][8], jobs_data[1][9], jobs_data[1][10], jobs_data[1][11], jobs_data[1][12])
 Church=Job(jobs_data[2][0], jobs_data[2][1], jobs_data[2][2], jobs_data[2][3], jobs_data[2][4], jobs_data[2][5], jobs_data[2][6], jobs_data[2][7], jobs_data[2][8], jobs_data[2][9], jobs_data[2][10], jobs_data[2][11], jobs_data[2][12])
@@ -121,7 +122,8 @@ Jobs = [Housework, Babysitting, Church, Farm, Inn, Restaurant, Lumberjack, Salon
 
 
 class Game:
-    def __init__(self):
+    def __init__(self, name):
+        self.name = name
         self.Constitution = 0
         self.Strength = 0
         self.Intelligence = 0
@@ -133,13 +135,60 @@ class Game:
         self.Sensitivity = 0
         self.Stress = 0
         self.gold = 0
+        self.age = 10
 
     def work(self, job, days):
+        if self.age < job.min_age:
+            print(f"Too young to work {job.name}")
+            return
         stats_gained = job.return_work_week(days)
-        return stats_gained
+        self.Constitution += stats_gained[0]
+        self.Strength += stats_gained[1]
+        self.Intelligence += stats_gained[2]
+        self.Refinement += stats_gained[3]
+        self.Charisma += stats_gained[4]
+        self.Morality += stats_gained[5]
+        self.Faith += stats_gained[6]
+        self.Sin += stats_gained[7]
+        self.Sensitivity += stats_gained[8]
+        self.Stress += stats_gained[9]
+        self.gold += stats_gained[10]
 
+    def __str__(self):
+        r_string = f"\nGame: {self.name}\n"
+        if self.Constitution != 0:
+            r_string += f"Constitution: {self.Constitution}\n"
+        if self.Strength != 0:
+            r_string += f"Strength: {self.Strength}\n"
+        if self.Intelligence != 0:
+            r_string += f"Intelligence: {self.Intelligence}\n"
+        if self.Refinement != 0:
+            r_string += f"Refinement: {self.Refinement}\n"
+        if self.Charisma != 0:
+            r_string += f"Charisma: {self.Charisma}\n"
+        if self.Morality != 0:
+            r_string += f"Morality: {self.Morality}\n"
+        if self.Faith != 0:
+            r_string += f"Faith: {self.Faith}\n"
+        if self.Sin != 0:
+            r_string += f"Sin: {self.Sin}\n"
+        if self.Sensitivity != 0:
+            r_string += f"Sensitivity: {self.Sensitivity}\n"
+        if self.Stress != 0:
+            r_string += f"Stress: {self.Stress}\n"
+        if self.gold != 0:
+            r_string += f"Gold: {self.gold}\n"
+        return r_string
+    
+    def grow_up(self):
+        self.age += 1
+    
+    def get_money(self, amount):
+        self.gold += amount
     
 
-NG = Game()
+NG = Game('NG')
+NG.work(Housework, 7)
+NG.work(Cabaret, 7)
 
-print(NG.work(Housework, 8))
+print(NG)
