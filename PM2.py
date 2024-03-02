@@ -162,7 +162,7 @@ class Class:
         return r_string
 
 
-
+#region Jobs and Classes
 Housework = Job("Housework", 0, 0, 0, 0, 0, 0, 0, 0, -2, 1, 0, 10)
 Babysitting = Job( "Babysitting", 0, 0, 0, 0, -1, 0, 0, 0, 1, 3, 4, 10)
 Church = Job("Church", 0, 0, 0, 0, 0, 1, 2, -2, 0, 1, 1, 10)
@@ -190,7 +190,7 @@ Protocol = Class("Protocol", 0, 0, 0, 1.5, 0, 0, 0, 0, 0, 1, -40)
 Science = Class("Science", 0, 0, 3, 0, 0, 0, 2, 0, 0, 1, -30)
 Strategy = Class("Strategy", 0, 0, 2, 0, 0, 0, 0, 0, -0.5, 1, -50)
 Theology = Class("Theology", 0, 0, 1, 0, 0, 0, 1.5, 0, 0, 1, -40)
-
+#endregion
 
 Jobs = [
     Housework, 
@@ -226,18 +226,19 @@ Classes = [
 class Game:
     def __init__(self, name):
         self.name = name
-        self.Constitution = 0
-        self.Strength = 0
-        self.Intelligence = 0
-        self.Refinement = 0
-        self.Charisma = 0
-        self.Morality = 0
-        self.Faith = 0
+        self.Constitution = 45
+        self.Strength = 45
+        self.Intelligence = 13
+        self.Refinement = 10
+        self.Charisma = 7
+        self.Morality = 14
+        self.Faith = 21
         self.Sin = 0
-        self.Sensitivity = 0
+        self.Sensitivity = 6
         self.Stress = 0
-        self.gold = 210
+        self.gold = 500
         self.age = 10
+        self.season = "SP" #dec-feb is winter, june-august is summer, september-nov is fall, march-may is spring
 
     def work(self, job, days):
         if self.age < job.min_age:
@@ -297,7 +298,14 @@ class Game:
     
     def grow_up(self):
         self.age += 1
-    
+        
+    def vacation(self, type, days, price):
+        if type == "sea":
+            self.gold = self.gold - days*price #FIND ACTUAL VACATION PRICE
+            self.Stress = self.Stress - days*3 
+
+        #####unfinished, need to account for season 
+
     def get_money(self, amount):
         self.gold += amount
     
