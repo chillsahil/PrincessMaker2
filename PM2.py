@@ -239,8 +239,27 @@ class Game:
         self.gold = 500
         self.age = 10
         self.season = "SP" #dec-feb is winter, june-august is summer, september-nov is fall, march-may is spring
+        self.month = 9
 
-    def work(self, job, days):
+    def curr_season(self):
+        if self.month == 12 or self.month == 1 or self.month == 2:
+            self.season = "WI"
+        if self.month == 6 or self.month == 7 or self.month == 8:
+            self.season = "SU"
+        if self.month == 9 or self.month == 10 or self.month == 11:
+            self.season == "FA"
+        else:
+            self.season == "SP"
+        return self.season
+
+    def pass_month(self):
+        if self.month == 12:
+            self.month == 1
+        else:
+            self.month +=1
+        self.fix_stats()
+
+    def work(self, job, days, output = False):
         if self.age < job.min_age:
             print(f"Too young to work {job.name}")
             return
@@ -256,9 +275,37 @@ class Game:
         self.Sensitivity += stats_gained[8]
         self.Stress += stats_gained[9]
         self.gold += stats_gained[10]
+
+        if output == True:
+            r_string = f"You worked {days} days.\nStats Gained:\n\n"
+
+            if stats_gained[0] != 0:
+                r_string += f"Constitution: {stats_gained[0]}\n"
+            if stats_gained[1] != 0:
+                r_string += f"Strength: {stats_gained[1]}\n"
+            if stats_gained[2] != 0:
+                r_string += f"Intelligence: {stats_gained[2]}\n"
+            if stats_gained[3] != 0:
+                r_string += f"Refinement: {stats_gained[3]}\n"
+            if stats_gained[4] != 0:
+                r_string += f"Charisma: {stats_gained[4]}\n"
+            if stats_gained[5] != 0:
+                r_string += f"Morality: {stats_gained[5]}\n"
+            if stats_gained[6] != 0:
+                r_string += f"Faith: {stats_gained[6]}\n"
+            if stats_gained[7] != 0:
+                r_string += f"Sin: {stats_gained[7]}\n"
+            if stats_gained[8] != 0:
+                r_string += f"Sensitivity: {stats_gained[8]}\n"
+            if stats_gained[9] != 0:
+                r_string += f"Stress: {stats_gained[9]}\n"
+            if stats_gained[10] != 0:
+                r_string += f"Gold: {stats_gained[10]}\n"
+            print(r_string)
+
         self.fix_stats()
 
-    def take_class(self,class_taken, days):
+    def take_class(self,class_taken, days, output = False):
         actual_days = class_taken.afford(days, self.gold)
         if actual_days != days:
             print(f"Out of money. {actual_days} out of {days} taken.")
@@ -299,16 +346,42 @@ class Game:
     def grow_up(self):
         self.age += 1
         
-    def vacation(self, type, days, price):
+    def vacation(self, type, days):
+        price = self.age * 10
+        self.gold -= price
+        v_string = f'Olive had a fun {type} vacation\n'
         if type == "sea":
-            self.gold = self.gold - days*price #FIND ACTUAL VACATION PRICE
-            self.Stress = self.Stress - days*3 
+            if self.season == "SU":
+                self.Stress -= days*6
+                v_string += f'Stress Reduced: -{days*6}\n'
+            if self.season == "WI":
+                self.Stress -= days*2
+                v_string += f'Stress Reduced: -{days*2}\n'
+            else:
+                self.Stress -= days*3
+                v_string += f'Stress Reduced: -{days*3}\n'
 
-        #####unfinished, need to account for season 
+
+        if type == "mountain":
+            if self.season == "FA":
+                self.Stress -= days*6
+                self.Sensitivity += 2*days
+                v_string += f'Stress Reduced: -{days*6}\n'
+                v_string += f'Sensitivity Gained: -{days*2}\n'
+            else:
+                self.Stress -= days*3
+                self.Sensitivity += 1*days
+                v_string += f'Stress Reduced: -{days*3}\n'
+                v_string += f'Sensitivity Gained: -{days*1}\n'
+
+        self.fix_stats()
+
+        print(v_string)
+
 
     def get_money(self, amount):
         self.gold += amount
-    
+        self.fix_stats()
     def fix_stats(self):
         # Iterate through all attributes and set negative values to 0
         for attr, value in vars(self).items():
@@ -316,3 +389,17 @@ class Game:
                 setattr(self, attr, 0)
 
 
+
+
+
+ng = Game("Hi")
+
+ng.work(Farm, 10, True)
+ng.work(Farm, 10, True)
+ng.work(Farm, 10, True)
+ng.work(Farm, 10, True)
+ng.work(Farm, 10, True)
+
+print(ng)
+ng.vacation("mountain", 10)
+print(ng)
