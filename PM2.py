@@ -223,6 +223,9 @@ Classes = [
     Theology
     ]
 
+
+
+
 class Game:
     def __init__(self, name):
         self.name = name
@@ -238,26 +241,51 @@ class Game:
         self.Stress = 0
         self.gold = 500
         self.age = 10
-        self.season = "SP" #dec-feb is winter, june-august is summer, september-nov is fall, march-may is spring
-        self.month = 9
+        self.month = 12
+
+        self.season = "SU" #dec-feb is winter, june-august is summer, september-nov is fall, march-may is spring
 
     def curr_season(self):
         if self.month == 12 or self.month == 1 or self.month == 2:
             self.season = "WI"
-        if self.month == 6 or self.month == 7 or self.month == 8:
+        elif self.month == 6 or self.month == 7 or self.month == 8:
             self.season = "SU"
-        if self.month == 9 or self.month == 10 or self.month == 11:
-            self.season == "FA"
+        elif self.month == 9 or self.month == 10 or self.month == 11:
+            self.season = "FA"
         else:
-            self.season == "SP"
+            self.season = "SP"
+        
         return self.season
 
     def pass_month(self):
         if self.month == 12:
-            self.month == 1
+            self.month = 1
         else:
             self.month +=1
+        self.Morality += 3
+        self.Stress +=2
+        self.curr_season()
         self.fix_stats()
+
+
+    def pocket_money(self):
+        if self.age == 10:
+            self.gold -= 20
+            self.Stress =- 20
+        else:
+            money = (18 - self.age)*10 + 20
+            self.gold -= money
+            self.Stress -= 20
+        self.fix_stats()
+
+    def free_time(self, days, paid = False):
+        if paid:
+            self.Stress -= 10*days
+            self.gold -= 10*days
+        else: 
+            self.Stress -= 5*days
+        self.fix_stats()
+
 
     def work(self, job, days, output = False):
         if self.age < job.min_age:
@@ -329,6 +357,11 @@ class Game:
     def __str__(self):
         self.fix_stats()
         r_string = f"\nGame: {self.name}\n"
+        r_string += f'Current Month: {self.month}\n'
+
+        r_string += f"Current Season: {self.season}\n"
+
+
         r_string += f"Constitution: {self.Constitution}\n"
         r_string += f"Strength: {self.Strength}\n"
         r_string += f"Intelligence: {self.Intelligence}\n"
@@ -345,9 +378,14 @@ class Game:
     
     def grow_up(self):
         self.age += 1
+        self.fix_stats()
+
         
     def vacation(self, type, days):
         price = self.age * 10
+        if self.gold < price:
+            print("Not enough money for a vacation")
+            return
         self.gold -= price
         v_string = f'Olive had a fun {type} vacation\n'
         if type == "sea":
@@ -382,7 +420,10 @@ class Game:
     def get_money(self, amount):
         self.gold += amount
         self.fix_stats()
+
     def fix_stats(self):
+        self.curr_season()
+
         # Iterate through all attributes and set negative values to 0
         for attr, value in vars(self).items():
             if isinstance(value, int) and value < 0:
@@ -391,15 +432,6 @@ class Game:
 
 
 
+ng = Game("Test")
 
-ng = Game("Hi")
 
-ng.work(Farm, 10, True)
-ng.work(Farm, 10, True)
-ng.work(Farm, 10, True)
-ng.work(Farm, 10, True)
-ng.work(Farm, 10, True)
-
-print(ng)
-ng.vacation("mountain", 10)
-print(ng)
