@@ -431,7 +431,23 @@ class Game:
 
 
 
+########################
+#All game commands so far:
+# display, work, class, addmoney, vacation, 
+# growup, pocket, freetime, month
+                
+'''
+def automate_game(inputfile):
+    with open(inputfile, 'r') as file:
+        for line in file:
+            if "Name:" in line:
+                title = "".join(line.split("Name:"))
+                ng = Game(title)
+                break
 
-ng = Game("Test")
+        lines = file.readlines()[1:]  # Read all lines starting from the second line
+        for line in lines:
+            print(line.strip())  # Process each line as needed
 
-
+automate_game("commandfile.txt")
+'''
