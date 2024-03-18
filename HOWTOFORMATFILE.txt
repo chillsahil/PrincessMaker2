@@ -1,0 +1,77 @@
+The commandfile.txt file is what you use to plan out routes and send commands to the game. 
+
+lines with '#' will be ignored, use this to make comments and separate months etc, 
+
+the first line must be formatted as such:
+Name: Game 1 (put whatever name you want here)
+
+
+the commands are:
+work (inputs: [Job Name], [days])
+class (inputs: [Class Name], [days])
+passmonth (inputs: None)
+display (inputs: None)
+grow (inputs: None)
+vacation (inputs: [Vacation type], [days])
+freetime (inputs: [days], [Paid (leave empty if unpaid)])
+pocket (inputs: None)
+addmoney (inputs: [Amount])
+
+
+formatting commands:
+
+each line should start with a command name(written above), 
+followed by its inputs separated by a space
+
+examples:
+
+work Housework 7 
+class Theology 7
+passmonth
+addmoney 100
+freetime 10 Paid
+grow
+display
+vacation sea 10
+
+
+
+
+Important information: 
+
+All Jobs: 
+    Housework, 
+    Babysitting, 
+    Church, 
+    Farm, 
+    Inn, 
+    Restaurant, 
+    Lumberjack, 
+    Salon, 
+    Masonry, 
+    Hunter, 
+    Graveyard, 
+    Bar, 
+    Tutor, 
+    Sleazy_Bar, 
+    Cabaret.
+
+All Classes:
+    Painting,
+    Dance,
+    Fighting,
+    Fencing,
+    Magic,
+    Poetry,
+    Protocol,
+    Science,
+    Strategy,
+    Theology
+
+Vacation types:
+    sea
+    mountain
+
+
+
+

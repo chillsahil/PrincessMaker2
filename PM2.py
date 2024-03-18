@@ -329,6 +329,8 @@ class Game:
                 r_string += f"Stress: {stats_gained[9]}\n"
             if stats_gained[10] != 0:
                 r_string += f"Gold: {stats_gained[10]}\n"
+            r_string += '#############################'
+
             print(r_string)
 
         self.fix_stats()
@@ -358,23 +360,23 @@ class Game:
         self.fix_stats()
         r_string = f"\nGame: {self.name}\n"
         r_string += f'Current Month: {self.month}\n'
+        r_string += f"Current Season: {self.season}\n\n"
 
-        r_string += f"Current Season: {self.season}\n"
-
-
-        r_string += f"Constitution: {self.Constitution}\n"
-        r_string += f"Strength: {self.Strength}\n"
-        r_string += f"Intelligence: {self.Intelligence}\n"
-        r_string += f"Refinement: {self.Refinement}\n"
-        r_string += f"Charisma: {self.Charisma}\n"
-        r_string += f"Morality: {self.Morality}\n"
-        r_string += f"Faith: {self.Faith}\n"
-        r_string += f"Sin: {self.Sin}\n"
-        r_string += f"Sensitivity: {self.Sensitivity}\n"
-        r_string += f"Stress: {self.Stress}\n"
-        r_string += f"Gold: {self.gold}\n"
+        r_string += f"Constitution: {int(self.Constitution)}\n"
+        r_string += f"Strength: {int(self.Strength)}\n"
+        r_string += f"Intelligence: {int(self.Intelligence)}\n"
+        r_string += f"Refinement: {int(self.Refinement)}\n"
+        r_string += f"Charisma: {int(self.Charisma)}\n"
+        r_string += f"Morality: {int(self.Morality)}\n"
+        r_string += f"Faith: {int(self.Faith)}\n"
+        r_string += f"Sin: {int(self.Sin)}\n"
+        r_string += f"Sensitivity: {int(self.Sensitivity)}\n"
+        r_string += f"Stress: {int(self.Stress)}\n"
+        r_string += f"Gold: {int(self.gold)}\n"
+        r_string += '#############################'
         
         return r_string
+
     
     def grow_up(self):
         self.age += 1
@@ -412,19 +414,20 @@ class Game:
                 v_string += f'Stress Reduced: -{days*3}\n'
                 v_string += f'Sensitivity Gained: -{days*1}\n'
 
+        v_string += '#############################'
+
         self.fix_stats()
 
         print(v_string)
 
 
-    def get_money(self, amount):
+    def add_money(self, amount):
         self.gold += amount
         self.fix_stats()
 
     def fix_stats(self):
         self.curr_season()
 
-        # Iterate through all attributes and set negative values to 0
         for attr, value in vars(self).items():
             if isinstance(value, int) and value < 0:
                 setattr(self, attr, 0)
@@ -432,22 +435,36 @@ class Game:
 
 
 ########################
-#All game commands so far:
-# display, work, class, addmoney, vacation, 
-# growup, pocket, freetime, month
                 
-'''
 def automate_game(inputfile):
     with open(inputfile, 'r') as file:
         for line in file:
             if "Name:" in line:
                 title = "".join(line.split("Name:"))
                 ng = Game(title)
+                print('Starting Stats: \n')
+                print(ng)
                 break
 
-        lines = file.readlines()[1:]  # Read all lines starting from the second line
-        for line in lines:
-            print(line.strip())  # Process each line as needed
+        command_functions = {
+            'work': lambda ng, command: ng.work(globals()[command[1]], int(command[2])),
+            'class': lambda ng, command: ng.take_class(globals()[command[1]], int(command[2])),
+            'display': lambda ng, command: print(ng),
+            'passmonth': lambda ng, command: ng.pass_month(),
+            'grow': lambda ng, command: ng.grow_up(),
+            'vacation': lambda ng, command: ng.vacation(command[1], int(command[2])),
+            'freetime': lambda ng, command: ng.free_time(int(command[1]), len(command) == 3),
+            'pocket': lambda ng, command: ng.pocket_money(),
+            'addmoney': lambda ng, command: ng.add_money(int(command[1])),
+        }
+
+        for line in file:
+            command = line.split()
+            if '#' in line:
+                pass
+            elif command[0] in command_functions:
+                command_functions[command[0]](ng, command)
+                
 
 automate_game("commandfile.txt")
-'''
+
