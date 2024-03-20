@@ -3,8 +3,16 @@ Name: Game 1
 work Farm 7
 work Farm 7
 work Farm 7
+work Farm 7
+work Farm 7
+work Farm 7
+work Farm 7
+work Farm 7
+work Farm 7
+work Farm 7
+work Farm 7
+work Farm 7
+work Farm 7
 display
-freetime 7 paid
-display
-freetime 7 
+passmonth
 display

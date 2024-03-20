@@ -267,6 +267,15 @@ class Game:
         self.curr_season()
         self.fix_stats()
 
+        if self.Sin > self.Morality or self.Sin > self.Faith:
+            print('WARNING: Daughter Risk of Delinquent')
+        elif self.Stress > self.Constitution:
+            print('WARNING: Daughter Risk of Sickness')
+        elif self.Sensitivity == max(self.Constitution, self.Strength, self.Intelligence, self.Refinement, self.Charisma, self.Morality, self.Faith, self.Sin, self.Sensitivity, self.Stress):
+            print('WARNING: Daughter Risk of Running away')
+
+
+
 
     def pocket_money(self):
         if self.age == 10:
@@ -453,7 +462,7 @@ def automate_game(inputfile):
             'passmonth': lambda ng, command: ng.pass_month(),
             'grow': lambda ng, command: ng.grow_up(),
             'vacation': lambda ng, command: ng.vacation(command[1], int(command[2])),
-            'freetime': lambda ng, command: ng.free_time(int(command[1]), len(command) == 3),
+            'freetime': lambda ng, command: ng.free_time(int(command[1]), len(command) == 3), #checks if there is a paid indicator or not
             'pocket': lambda ng, command: ng.pocket_money(),
             'addmoney': lambda ng, command: ng.add_money(int(command[1])),
         }
