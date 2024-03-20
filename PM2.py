@@ -242,6 +242,7 @@ class Game:
         self.gold = 500
         self.age = 10
         self.month = 12
+        self.bt = "A"
 
         self.season = "SU" #dec-feb is winter, june-august is summer, september-nov is fall, march-may is spring
 
@@ -262,8 +263,11 @@ class Game:
             self.month = 1
         else:
             self.month +=1
-        self.Morality += 3
-        self.Stress +=2
+            
+        if self.bt == 'A':
+            self.Morality += 3
+            self.Stress +=2
+        
         self.curr_season()
         self.fix_stats()
 
