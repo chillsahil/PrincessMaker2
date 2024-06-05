@@ -481,3 +481,4 @@ def automate_game(inputfile):
 
 automate_game("commandfile.txt")
 
+#comment
